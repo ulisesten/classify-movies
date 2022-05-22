@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Clasificación De Películas</string>
+
+    <string name="popular_url">https://api.themoviedb.org/3/movie/popular?api_key=325b090f323374b186299125326c4c79</string>
+    <string name="playing_now_url">https://api.themoviedb.org/3/movie/now_playing?api_key=325b090f323374b186299125326c4c79</string>
+    <string name="detail_url">https://api.themoviedb.org/3/movie/%1$s?api_key=325b090f323374b186299125326c4c79</string>
+    <string name="poster_path_url">https://image.tmdb.org/t/p/w500%1$s</string>
+
+    <string name="primary_section">Viéndose ahora</string>
+    <string name="secondary_section">Populares</string>
+    <string name="api_key">325b090f323374b186299125326c4c79</string>
+
+</resources>

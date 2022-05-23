@@ -13,7 +13,7 @@ import com.entrevista.appdepeliculas.data.network.Repository
 import com.entrevista.appdepeliculas.model.Movie
 import kotlinx.coroutines.*
 
-class MainViewModel(private val requestQueue: RequestQueue, private var _url:String): ViewModel() {
+class MainViewModel(private val repository:Repository, private var _url:String): ViewModel() {
 
     private val popularMovieList: LiveData<MutableList<Movie>> by lazy {
         MutableLiveData<MutableList<Movie>>().also { liveData ->
@@ -53,7 +53,7 @@ class MainViewModel(private val requestQueue: RequestQueue, private var _url:Str
 
     private fun loadContentList(liveData: MutableLiveData<MutableList<Movie>>){
         viewModelScope.launch(Dispatchers.IO) {
-            Repository(requestQueue).getData(_url) { json ->
+            repository.getData(_url) { json ->
                 val jsonList = json.getJSONArray("results")
                 val list = mutableListOf<Movie>()
 

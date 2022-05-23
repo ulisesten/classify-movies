@@ -1,5 +1,6 @@
 package com.entrevista.appdepeliculas.viewmodel
 
+import android.content.res.Resources
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.volley.RequestQueue
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.entrevista.appdepeliculas.R
 import com.entrevista.appdepeliculas.data.network.Repository
 import com.entrevista.appdepeliculas.model.MovieDetail
 import com.entrevista.appdepeliculas.model.VideoData
@@ -20,7 +22,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-class MovieDetailViewModel(private val requestQueue: RequestQueue, private val detailUrl:String, private val movieId:String): ViewModel() {
+class MovieDetailViewModel(private val repository: Repository, private val movieId:String): ViewModel() {
+    private lateinit var trailersUrl: String
+    private lateinit var movieDetailUrl: String
+
     private val movieDetail: LiveData<MovieDetail> by lazy {
         MutableLiveData<MovieDetail>().also { liveData ->
             loadMovieDetail(liveData)
@@ -43,7 +48,22 @@ class MovieDetailViewModel(private val requestQueue: RequestQueue, private val d
             return videoData
         }
 
-    fun setImageUrl(imageView: ImageView, url: String?) {
+    fun setTrailersUrl(url:String){
+        this.trailersUrl = url
+    }
+
+    fun setMovieDetailUrl(url:String){
+        this.movieDetailUrl = url
+    }
+
+    fun setResource(res: Resources){
+        viewModelScope.launch {
+            trailersUrl = res.getString(R.string.trailers_url, movieId)
+            movieDetailUrl = res.getString(R.string.detail_url, movieId)
+        }
+    }
+
+    fun setImageViewSrc(imageView: ImageView, url: String?) {
         url?.let {
             Glide.with(imageView)
                 .load(url)
@@ -66,15 +86,16 @@ class MovieDetailViewModel(private val requestQueue: RequestQueue, private val d
 
     private fun loadMovieDetail(detail: MutableLiveData<MovieDetail>){
         viewModelScope.launch(Dispatchers.IO) {
-            val url =
-                "https://api.themoviedb.org/3/movie/${movieId}?api_key=325b090f323374b186299125326c4c79"
+            //val url =
+            //    "https://api.themoviedb.org/3/movie/${movieId}?api_key=325b090f323374b186299125326c4c79"
 
-            Repository(requestQueue).getData(detailUrl) { data ->
+            repository.getData(movieDetailUrl) { data ->
                 val genresJson = data.getJSONArray("genres")
                 val producersJson = data.getJSONArray("production_companies")
                 detail.value = MovieDetail(
                     "",
                     data.getString("title"),
+                    data.getString("vote_average"),
                     data.getString("release_date"),
                     parseJsonList(genresJson,"name"),
                     data.getString("popularity"),
@@ -97,10 +118,9 @@ class MovieDetailViewModel(private val requestQueue: RequestQueue, private val d
 
     private fun loadVideoData(detail: MutableLiveData<MutableList<VideoData>>){
         viewModelScope.launch(Dispatchers.IO) {
-            val url =
-                "https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=325b090f323374b186299125326c4c79"
+            //val url = "https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=325b090f323374b186299125326c4c79"
 
-            Repository(requestQueue).getData(url) { data ->
+            repository.getData(trailersUrl) { data ->
                 val jsonList = data.getJSONArray("results")
                 val list = mutableListOf<VideoData>()
                 for (i in 0 until jsonList.length()) {

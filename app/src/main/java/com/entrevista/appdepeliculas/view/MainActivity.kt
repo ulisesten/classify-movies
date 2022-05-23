@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.android.volley.toolbox.Volley
 import com.entrevista.appdepeliculas.R
+import com.entrevista.appdepeliculas.data.network.Repository
 import com.entrevista.appdepeliculas.databinding.ActivityMainBinding
 import com.entrevista.appdepeliculas.model.Movie
 import com.entrevista.appdepeliculas.view.adapters.MainAdapter
@@ -12,7 +13,7 @@ import com.entrevista.appdepeliculas.viewmodel.MainViewModel
 
 const val MOVIE_ID = "movie id"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -21,16 +22,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val model = MainViewModel(Volley.newRequestQueue(this), resources.getString(R.string.popular_url))
+        val repository = Repository(Volley.newRequestQueue(this))
+        val model = MainViewModel(repository, resources.getString(R.string.popular_url))
 
         model.popularContent.observe(this){ popularMovieList ->
-            binding.popularRecyclerview.adapter = MainAdapter(popularMovieList, model::setImageUrl, ::adapterOnClick)
+            binding.popularRecyclerview
+                .adapter = MainAdapter(popularMovieList, model::setImageUrl, ::adapterOnClick)
         }
 
         model.setUrl(resources.getString(R.string.playing_now_url))
 
         model.playingNowContent.observe(this){ playingNowMovieList ->
-            binding.playingNowRecyclerview.adapter = MainAdapter(playingNowMovieList, model::setImageUrl, ::adapterOnClick)
+            binding.playingNowRecyclerview
+                .adapter = MainAdapter(playingNowMovieList, model::setImageUrl, ::adapterOnClick)
         }
 
     }

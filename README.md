@@ -2,6 +2,7 @@
 #### entrevista tecnica
 
 ## Developer: Ulises Martínez Elías
+### ulises.mtz.el@gmail.com
 
 Se usó la API indicada: https://developers.themoviedb.org/
 

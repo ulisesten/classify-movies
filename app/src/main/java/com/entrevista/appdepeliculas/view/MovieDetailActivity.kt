@@ -27,31 +27,38 @@ class MovieDetailActivity : AppCompatActivity() {
         val movieId = intent.getStringExtra(MOVIE_ID) as String
 
         val repository = Repository(Volley.newRequestQueue(this))
-        val model = MovieDetailViewModel(repository, movieId)
-        model.setResource(resources)
 
-        model.detail.observe(this){ details ->
+        val viewModel = MovieDetailViewModel(repository, movieId)
+
+        viewModel.setResource(resources)
+
+        viewModel.detail.observe(this){ details ->
 
             val posterUrl = resources.getString(R.string.poster_path_url, details.posterPath)
 
             attachData(binding, details)
-            model.setImageViewSrc(binding.ivPoster, posterUrl)
+            viewModel.setImageViewSrc(binding.ivPoster, posterUrl)
 
         }
 
-        model.video.observe(this){ videoData ->
-            binding.videoRecyclerview.adapter = MovieVideoAdapter(videoData)
+        viewModel.video.observe(this){ videoData ->
+            binding.videoRecyclerview.adapter = MovieVideoAdapter(videoData, viewModel::loadVideo)
         }
     }
 
     private fun attachData(binding: ActivityMovieDetailBinding, details:MovieDetail){
         with(binding) {
+
             tvDetailTitle.text = details.title
+
             "(${details.releaseDate})".also { tvReleaseDate.text = it }
+
             "Rate ${details.voteAverage}/10".also { tvRate.text = it }
+
             tvDetailSynopsis.text = details.overview
 
             genreRecyclerview.adapter = TextViewAdapter(details.genres)
+
             producerRecyclerview.adapter = TextViewAdapter(details.producers)
 
         }

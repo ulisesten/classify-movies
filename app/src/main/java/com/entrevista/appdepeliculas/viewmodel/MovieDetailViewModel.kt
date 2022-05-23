@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.volley.RequestQueue
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.entrevista.appdepeliculas.R
@@ -48,14 +47,6 @@ class MovieDetailViewModel(private val repository: Repository, private val movie
             return videoData
         }
 
-    fun setTrailersUrl(url:String){
-        this.trailersUrl = url
-    }
-
-    fun setMovieDetailUrl(url:String){
-        this.movieDetailUrl = url
-    }
-
     fun setResource(res: Resources){
         viewModelScope.launch {
             trailersUrl = res.getString(R.string.trailers_url, movieId)
@@ -73,11 +64,11 @@ class MovieDetailViewModel(private val repository: Repository, private val movie
     }
 
     @BindingAdapter("view")
-    fun loadVideo(view:YouTubePlayerView, data:VideoData){
-        viewModelScope.launch {
+    fun loadVideo(view:YouTubePlayerView, key:String){
+        viewModelScope.launch(Dispatchers.IO) {
             view.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.loadVideo(data.key, 0f)
+                    youTubePlayer.loadVideo(key, 0f)
 
                 }
             })
@@ -86,14 +77,12 @@ class MovieDetailViewModel(private val repository: Repository, private val movie
 
     private fun loadMovieDetail(detail: MutableLiveData<MovieDetail>){
         viewModelScope.launch(Dispatchers.IO) {
-            //val url =
-            //    "https://api.themoviedb.org/3/movie/${movieId}?api_key=325b090f323374b186299125326c4c79"
 
             repository.getData(movieDetailUrl) { data ->
                 val genresJson = data.getJSONArray("genres")
                 val producersJson = data.getJSONArray("production_companies")
                 detail.value = MovieDetail(
-                    "",
+                    data.getString("id"),
                     data.getString("title"),
                     data.getString("vote_average"),
                     data.getString("release_date"),
@@ -118,7 +107,6 @@ class MovieDetailViewModel(private val repository: Repository, private val movie
 
     private fun loadVideoData(detail: MutableLiveData<MutableList<VideoData>>){
         viewModelScope.launch(Dispatchers.IO) {
-            //val url = "https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=325b090f323374b186299125326c4c79"
 
             repository.getData(trailersUrl) { data ->
                 val jsonList = data.getJSONArray("results")

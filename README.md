@@ -9,13 +9,14 @@ Se usó la API indicada: https://developers.themoviedb.org/
 
 - Revisar la lista de Populares y Playing now, me parece que ambas son la misma. Cambiaría por una categoria diferente
 - El idioma quedo en inglés. Revisaría la información que provee la API, pues el formato es diferente
+- El RecyclerView de los videos en MovieDetailAcitvity no tiene el mejor comportamiento, ya que no ajusta el video al layout como lo haría un ViewPager. Yo optaría por ajustar el adapter para que se comporte como el viewPager, pero manteniendo el recyclerview para un mejor rendimiento.
 
-Bibliotecas
+## Bibliotecas
 - Volley para la conexion a la API
 - Glide para manejar los imageView
 - [android-youtube-player](https://github.com/PierfrancescoSoffritti/Android-YouTube-Player) para reproducir los trailers de cada película
 
-Estructura:
+## Estructura
 
     appdepeliculas/
         +-- data/

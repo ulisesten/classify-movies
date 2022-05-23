@@ -23,18 +23,18 @@ class MainActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val repository = Repository(Volley.newRequestQueue(this))
-        val model = MainViewModel(repository, resources.getString(R.string.popular_url))
+        val viewModel = MainViewModel(repository, resources.getString(R.string.popular_url))
 
-        model.popularContent.observe(this){ popularMovieList ->
+        viewModel.popularContent.observe(this){ popularMovieList ->
             binding.popularRecyclerview
-                .adapter = MainAdapter(popularMovieList, model::setImageUrl, ::adapterOnClick)
+                .adapter = MainAdapter(popularMovieList, viewModel::setImageUrl, ::adapterOnClick)
         }
 
-        model.setUrl(resources.getString(R.string.playing_now_url))
+        viewModel.setUrl(resources.getString(R.string.playing_now_url))
 
-        model.playingNowContent.observe(this){ playingNowMovieList ->
+        viewModel.playingNowContent.observe(this){ playingNowMovieList ->
             binding.playingNowRecyclerview
-                .adapter = MainAdapter(playingNowMovieList, model::setImageUrl, ::adapterOnClick)
+                .adapter = MainAdapter(playingNowMovieList, viewModel::setImageUrl, ::adapterOnClick)
         }
 
     }

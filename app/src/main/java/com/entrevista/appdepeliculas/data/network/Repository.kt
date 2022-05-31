@@ -7,9 +7,9 @@ import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONArray
 import org.json.JSONObject
 
-class Repository(private val requestQueue: RequestQueue) {
+class Repository(private val requestQueue: RequestQueue): IRepository {
 
-    fun getData(url: String, cb: (arr: JSONObject) -> Unit ){
+    override fun getData(url: String, cb: (arr: JSONObject) -> Unit ){
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET

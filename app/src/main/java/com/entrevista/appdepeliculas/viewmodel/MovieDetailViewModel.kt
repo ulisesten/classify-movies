@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.entrevista.appdepeliculas.R
-import com.entrevista.appdepeliculas.data.network.Repository
+import com.entrevista.appdepeliculas.data.network.IRepository
 import com.entrevista.appdepeliculas.model.MovieDetail
 import com.entrevista.appdepeliculas.model.VideoData
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -21,7 +21,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-class MovieDetailViewModel(private val repository: Repository, private val movieId:String): ViewModel() {
+class MovieDetailViewModel(private val repository: IRepository, private val movieId:String): ViewModel() {
     private lateinit var trailersUrl: String
     private lateinit var movieDetailUrl: String
 
@@ -86,20 +86,20 @@ class MovieDetailViewModel(private val repository: Repository, private val movie
                     data.getString("title"),
                     data.getString("vote_average"),
                     data.getString("release_date"),
-                    parseJsonList(genresJson,"name"),
+                    parseJsonList(genresJson),
                     data.getString("popularity"),
                     data.getString("backdrop_path"),
                     data.getString("overview"),
-                    parseJsonList(producersJson, "name")
+                    parseJsonList(producersJson)
                 )
             }
         }
     }
 
-    private fun parseJsonList(list:JSONArray, name:String):List<String>{
+    private fun parseJsonList(list: JSONArray):List<String>{
         val result = mutableListOf<String>()
         for(i in 0 until list.length()){
-            result.add(list.getJSONObject(i).getString(name))
+            result.add(list.getJSONObject(i).getString("name"))
         }
 
         return result

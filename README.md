@@ -1,16 +1,18 @@
 # App de Peliculas/series
-#### entrevista tecnica
 
-## Developer: Ulises Martínez Elías
-### ulises.mtz.el@gmail.com
+## Desarrollador:
+- Ulises Martínez Elías
+ulises.mtz.el@gmail.com
 
-Se usó la API indicada: https://developers.themoviedb.org/
+## API's:
+- https://developers.themoviedb.org/
 
-## Cosas que faltaron
-
-- Revisar la lista de Populares y Playing now, me parece que ambas son la misma. Cambiaría por una categoria diferente
-- El idioma quedo en inglés. Revisaría la información que provee la API, pues el formato es diferente
-- El RecyclerView de los videos en MovieDetailAcitvity no tiene el mejor comportamiento, ya que no ajusta el video al layout como lo haría un ViewPager. Yo optaría por ajustar el adapter para que se comporte como el viewPager, pero manteniendo el recyclerview para un mejor rendimiento.
+## Funciones:
+- Reproducción de videos de Youtube
+- Conexión Http
+- Renderización de imágenes
+- Recycler View
+- Arquitectura MVVM
 
 ## Bibliotecas
 - Volley para la conexion a la API
@@ -41,3 +43,9 @@ Se usó la API indicada: https://developers.themoviedb.org/
         `-- viewmodel/
               +-- MainViewModel.kt
               `-- MovieDetailViewModel.kt
+
+
+## Screenshots
+
+<img alt="Home screen" src="./docs/screenshots/sc1.png" width="30%"/>
+<img alt="Home screen" src="./docs/screenshots/sc2.png" width="30%"/>

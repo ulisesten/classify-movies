@@ -6,14 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.volley.RequestQueue
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.entrevista.appdepeliculas.data.network.Repository
+import com.entrevista.appdepeliculas.data.network.IRepository
 import com.entrevista.appdepeliculas.model.Movie
 import kotlinx.coroutines.*
 
-class MainViewModel(private val repository:Repository, private var _url:String): ViewModel() {
+class MainViewModel(private val repository: IRepository, private var _url:String): ViewModel() {
 
     private val popularMovieList: LiveData<MutableList<Movie>> by lazy {
         MutableLiveData<MutableList<Movie>>().also { liveData ->
